@@ -1,2 +1,3 @@
 rootProject.name = 'hero'
+include 'src'
 
