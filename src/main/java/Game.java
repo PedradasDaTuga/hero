@@ -1,18 +1,15 @@
 import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-
 import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    private int x=10;
-    private int y=10;
+    private Hero hero;
     public Game(){
         try {
             //   Terminal terminal = new DefaultTerminalFactory().createTerminal();
@@ -23,6 +20,7 @@ public class Game {
             screen.setCursorPosition(null);
             screen.startScreen();
             screen.doResizeIfNecessary();
+            hero= new Hero(10,10);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -30,23 +28,25 @@ public class Game {
     }
     private void draw() throws IOException{
         screen.clear();
-        screen.setCharacter(x, y, TextCharacter.fromCharacter('X')[0]);
+        hero.draw(screen);
+       // screen.setCharacter(x, y, TextCharacter.fromCharacter('X')[0]);
         screen.refresh();
     }
     private void processKey(com.googlecode.lanterna.input.KeyStroke key) throws IOException{
         System.out.println(key);
         switch (key.getKeyType()){
             case ArrowLeft: {
-                x=x-1;break;
+                hero.moveLeft();
+                break;
             }
             case ArrowDown : {
-                y=y+1;break;
+                hero.moveDown();break;
             }
             case ArrowRight:{
-                x=x+1;break;
+                hero.moveRight();break;
             }
             case ArrowUp :{
-                y=y-1;break;
+                hero.moveUp();break;
             }
         }
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
