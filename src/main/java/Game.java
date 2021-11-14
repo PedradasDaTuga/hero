@@ -32,10 +32,14 @@ public class Game {
        // screen.setCharacter(x, y, TextCharacter.fromCharacter('X')[0]);
         screen.refresh();
     }
+    private void moveHero(Position position) {
+        hero.setPosition(position);
+    }
     private void processKey(com.googlecode.lanterna.input.KeyStroke key) throws IOException{
         System.out.println(key);
         switch (key.getKeyType()){
             case ArrowLeft: {
+              //  moveHero(hero.moveUp())
                 hero.moveLeft();
                 break;
             }
@@ -46,7 +50,9 @@ public class Game {
                 hero.moveRight();break;
             }
             case ArrowUp :{
-                hero.moveUp();break;
+                moveHero(hero.moveUp());
+            //    hero.moveUp();
+                break;
             }
         }
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
