@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    private Hero hero;
+    private Arena arena;
     public Game(){
         try {
             //   Terminal terminal = new DefaultTerminalFactory().createTerminal();
@@ -20,7 +20,7 @@ public class Game {
             screen.setCursorPosition(null);
             screen.startScreen();
             screen.doResizeIfNecessary();
-            hero= new Hero(10,10);
+            arena=new Arena(40,20);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -28,45 +28,26 @@ public class Game {
     }
     private void draw() throws IOException{
         screen.clear();
-        hero.draw(screen);
-       // screen.setCharacter(x, y, TextCharacter.fromCharacter('X')[0]);
+        arena.draw(screen.newTextGraphics());
+        // screen.setCharacter(x, y, TextCharacter.fromCharacter('X')[0]);
         screen.refresh();
     }
-    private void moveHero(Position position) {
-        hero.setPosition(position);
-    }
+
     private void processKey(com.googlecode.lanterna.input.KeyStroke key) throws IOException{
-        System.out.println(key);
-        switch (key.getKeyType()){
-            case ArrowLeft: {
-              //  moveHero(hero.moveUp())
-                hero.moveLeft();
-                break;
-            }
-            case ArrowDown : {
-                hero.moveDown();break;
-            }
-            case ArrowRight:{
-                hero.moveRight();break;
-            }
-            case ArrowUp :{
-                moveHero(hero.moveUp());
-            //    hero.moveUp();
-                break;
-            }
-        }
-        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
-            screen.close();
-        }
+        arena.processKey(key);
     }
     public void run() throws IOException{
-        draw();
+
         while(true){
-            KeyStroke chave = screen.readInput();
-            if (chave.getKeyType()==KeyType.EOF )
-                break;
-            processKey(chave);
             draw();
+            KeyStroke key = screen.readInput();
+            if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
+                screen.close();
+            }
+            if (key.getKeyType()==KeyType.EOF )
+                break;
+            processKey(key);
+
         }
 
 
